@@ -1,0 +1,30 @@
+.custom-url{
+  display: none;
+}
+#uncheck_all{
+  margin-left: 20px;
+}
+.edit_form{
+  display: none;
+}
+.banned{
+  display: none;
+}
+.action > *{
+  margin-right: 5px;
+  text-align: center;
+}
+tr td:last-child,
+tr th:last-child
+{
+  text-align: center;
+}
+.comment_circle{
+  padding: 4px 9px 4px 8px;
+  background: #f00;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  margin: 0 0 0 8px;
+  font-size: 12px;
+}
