@@ -28,7 +28,7 @@
             <label for="publisher">Publishers</label>
             <select id="publisher" class="form-control" name="publisher">
                 @foreach($publishers as $publisher)
-                    <option @if($publisher->id == $book->publishers_id) selected @endif value="{{ $publisher->id }}">{{ $publisher->title }}</option>
+                    <option @if($publisher->id == $book->publisher_id) selected @endif value="{{ $publisher->id }}">{{ $publisher->title }}</option>
                 @endforeach
             </select>
         </div>

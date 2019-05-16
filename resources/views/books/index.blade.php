@@ -14,16 +14,15 @@
         </thead>
         <tbody>
     @foreach($books as $index => $book)
-        @dump($book->publishers1)
         <tr scope="row">
             <td>{{ $index + 1 }}</td>
             <td>{{ $book->title }}</td>
 
             <td>
-{{--                    {{ $book->publishers->first()->title }}--}}
+                    {{ $book->publishers->first()->title }}
             </td>
             <td>
-{{--                {{ $book->authors->first()->name }}--}}
+                {{ $book->authors->first()->name }}
             </td>
             <td>{{ $book->isbn }}</td>
             <td>{{ $book->count_of_pages }}</td>

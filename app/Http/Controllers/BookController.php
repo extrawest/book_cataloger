@@ -7,6 +7,11 @@ use App\Publisher;
 use App\User;
 use Illuminate\Http\Request;
 
+/**
+ * Class BookController
+ *
+ * @package App\Http\Controllers
+ */
 class BookController extends Controller
 {
     /**
@@ -52,34 +57,27 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $this->validate($request,
+            [
             'title'      =>  'required|min:3',
             'isbn' => 'required|numeric',
             'count_of_pages'  =>  'required|numeric',
             'author'  =>  'required',
             'publisher'  =>  'required'
-        ]);
-        $book = Book::create([
+            ]
+        );
+        Book::create(
+            [
             'title'             =>  $request->title,
             'isbn'              =>  $request->isbn,
             'count_of_pages'    =>  $request->count_of_pages,
             'user_id'           =>  $request->author,
-            'publishers_id'     =>  $request->publisher
-        ]);
+            'publisher_id'     =>  $request->publisher
+            ]
+        );
 
 
         return redirect(route('all_books'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Book $book)
-    {
-        //
     }
 
     /**
@@ -104,7 +102,24 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $this->validate($request,
+            [
+                'title'      =>  'required|min:3',
+                'isbn' => 'required|numeric',
+                'count_of_pages'  =>  'required|numeric',
+                'author'  =>  'required',
+                'publisher'  =>  'required'
+            ]
+        );
+
+        $book->title = $request->title;
+        $book->isbn = $request->isbn;
+        $book->count_of_pages =  $request->count_of_pages;
+        $book->user_id = $request->author;
+        $book->publisher_id = $request->publisher;
+        $book->save();
+
+        return redirect(route('all_books'));
     }
 
     /**
@@ -115,6 +130,10 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book = Book::find($book->id);
+
+        $book->delete();
+
+        return back();
     }
 }
