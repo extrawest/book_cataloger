@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Helpers;
 use App\Publisher;
 use App\User;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
  */
 class BookController extends Controller
 {
+    protected $helpers;
     /**
      * Instantiate a new controller instance.
      *
@@ -22,7 +24,7 @@ class BookController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-
+        $this->helpers = new Helpers();
     }
 
     /**
@@ -57,7 +59,8 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,
+        $this->validate(
+            $request,
             [
             'title'      =>  'required|min:3',
             'isbn' => 'required|numeric',
@@ -66,7 +69,7 @@ class BookController extends Controller
             'publisher'  =>  'required'
             ]
         );
-        Book::create(
+        $book = Book::create(
             [
             'title'             =>  $request->title,
             'isbn'              =>  $request->isbn,
@@ -76,7 +79,7 @@ class BookController extends Controller
             ]
         );
 
-
+        $this->helpers->logRecorder($book);
         return redirect(route('all_books'));
     }
 
@@ -102,7 +105,8 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        $this->validate($request,
+        $this->validate(
+            $request,
             [
                 'title'      =>  'required|min:3',
                 'isbn' => 'required|numeric',
@@ -118,6 +122,7 @@ class BookController extends Controller
         $book->user_id = $request->author;
         $book->publisher_id = $request->publisher;
         $book->save();
+        $this->helpers->logRecorder($book);
 
         return redirect(route('all_books'));
     }
@@ -132,6 +137,7 @@ class BookController extends Controller
     {
         $book = Book::find($book->id);
 
+        $this->helpers->logRecorder($book);
         $book->delete();
 
         return back();

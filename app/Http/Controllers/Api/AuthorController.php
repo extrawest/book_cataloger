@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,18 @@ use Illuminate\Support\Facades\Validator;
  */
 class AuthorController extends Controller
 {
+    protected $helpers;
+
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+        $this->helpers = new Helpers();
+    }
 
     /**
      * Display a listing of the resource.
@@ -59,6 +72,8 @@ class AuthorController extends Controller
             ]
         );
 
+        $this->helpers->logRecorder($author);
+
         return response()->json($author);
     }
 
@@ -87,7 +102,7 @@ class AuthorController extends Controller
         $author->name = $request->name;
         $author->password = Hash::make($request->password);
         $author->save();
-
+        $this->helpers->logRecorder($author);
         return response()->json($author);
     }
 
@@ -104,7 +119,7 @@ class AuthorController extends Controller
         if ($author == null) {
             return response()->json(['message' => "This user doesn't exist"]);
         }
-
+        $this->helpers->logRecorder($author);
         $author->delete();
 
         return response()->json(['message' => 'User was deleted successfully']);

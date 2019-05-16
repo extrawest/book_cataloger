@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers;
 use App\Publisher;
 use App\User;
 use Illuminate\Http\Request;
@@ -15,6 +16,18 @@ use Illuminate\Support\Facades\Validator;
  */
 class PublisherController extends Controller
 {
+    protected $helpers;
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+        $this->helpers = new Helpers();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -53,6 +66,7 @@ class PublisherController extends Controller
                 'url'   => $request->url
             ]
         );
+        $this->helpers->logRecorder($publisher);
 
         return response()->json($publisher);
     }
@@ -82,7 +96,7 @@ class PublisherController extends Controller
         $publisher->title = $request->title;
         $publisher->url = $request->url;
         $publisher->save();
-
+        $this->helpers->logRecorder($publisher);
         return response()->json($publisher);
     }
 
@@ -99,6 +113,7 @@ class PublisherController extends Controller
             return response()->json(['message' => "This publisher doesn't exist"]);
         }
 
+        $this->helpers->logRecorder($publisher);
         $publisher->delete();
 
         return response()->json(['message' => 'Publisher was deleted successfully']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers;
 use App\Publisher;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
  */
 class PublisherController extends Controller
 {
+    protected $helpers;
     /**
      * Instantiate a new controller instance.
      *
@@ -21,6 +23,7 @@ class PublisherController extends Controller
     {
         $this->middleware('auth');
 
+        $this->helpers = new Helpers();
     }
 
     /**
@@ -53,19 +56,21 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,
+        $this->validate(
+            $request,
             [
-            'title' => 'required|min:3',
-            'url'    =>  'required|url',
+                'title' => 'required|min:3',
+                'url'    =>  'required|url',
             ]
         );
 
-        Publisher::create(
+        $publisher = Publisher::create(
             [
                 'title' => $request->title,
                 'url'   => $request->url
             ]
         );
+        $this->helpers->logRecorder($publisher);
 
         return redirect(route('all_publishers'));
     }
@@ -102,6 +107,8 @@ class PublisherController extends Controller
         $publisher->url = $request->url;
         $publisher->save();
 
+        $this->helpers->logRecorder($publisher);
+
         return redirect(route('all_publishers'));
     }
 
@@ -113,6 +120,7 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
+        $this->helpers->logRecorder($publisher);
         $publisher->delete();
 
         return redirect(route('all_publishers'));
