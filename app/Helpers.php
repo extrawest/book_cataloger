@@ -32,7 +32,5 @@ class Helpers
         } else {
             Storage::put($path, $line);
         }
-
-
     }
 }

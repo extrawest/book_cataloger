@@ -1,16 +1,29 @@
 <?php
 
 use App\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class UsersTableSeeder
+/**
+ * Class UsersTableSeeder
+ *
+ */
+class UsersTableSeeder extends Seeder
 {
+    /**
+     * Run seeding default data
+     */
     public function run()
     {
-        User::create([
+        User::create(
+            [
             'name' => 'Vitaliy',
             'email' => 'admin@admin.com',
             'password' => Hash::make('pass4now'),
-        ]);
+            'is_author' =>  false
+            ]
+        );
+
+        factory(App\User::class, 50)->create();
     }
 }
