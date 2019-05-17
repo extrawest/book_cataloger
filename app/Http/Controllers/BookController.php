@@ -34,7 +34,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
+        $books = Book::paginate(10);
 
         return view('books.index', compact('books'));
     }
@@ -109,8 +109,8 @@ class BookController extends Controller
             $request,
             [
                 'title'      =>  'required|min:3',
-                'isbn' => 'required|numeric',
-                'count_of_pages'  =>  'required|numeric',
+                'isbn' => 'required|numeric|max:9999999999999',
+                'count_of_pages'  =>  'required|numeric|max:9999',
                 'author'  =>  'required',
                 'publisher'  =>  'required'
             ]

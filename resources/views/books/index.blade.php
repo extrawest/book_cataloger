@@ -3,7 +3,6 @@
     <table class="table table-bordered">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Book</th>
             <th scope="col">Publisher</th>
             <th scope="col">Authors</th>
@@ -15,14 +14,12 @@
         <tbody>
     @foreach($books as $index => $book)
         <tr scope="row">
-            <td>{{ $index + 1 }}</td>
             <td>{{ $book->title }}</td>
-
             <td>
-                    {{ $book->publishers->first()->title }}
+                    {{ $book->publishers->count() > 0 ? $book->publishers->first()->title : 'Publisher was deleted' }}
             </td>
             <td>
-                {{ $book->authors->first()->name }}
+                {{ $book->authors->count() > 0 ? $book->authors->first()->name : 'Author was deleted'}}
             </td>
             <td>{{ $book->isbn }}</td>
             <td>{{ $book->count_of_pages }}</td>
@@ -34,4 +31,13 @@
     @endforeach
         </tbody>
     </table>
+    @if($books instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="paginate">
+                    {{ $books->links() }}
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection

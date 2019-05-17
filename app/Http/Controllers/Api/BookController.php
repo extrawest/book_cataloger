@@ -61,16 +61,23 @@ class BookController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
-        $book = Book::create(
-            [
-                'title'             =>  $request->title,
-                'isbn'              =>  $request->isbn,
-                'count_of_pages'    =>  $request->count_of_pages,
-                'user_id'           =>  $request->author,
-                'publisher_id'     =>  $request->publisher
-            ]
-        );
-        $this->helpers->logRecorder($book);
+
+        try
+        {
+            $book = Book::create(
+                [
+                    'title'          => $request->title,
+                    'isbn'           => $request->isbn,
+                    'count_of_pages' => $request->count_of_pages,
+                    'user_id'        => $request->author,
+                    'publisher_id'   => $request->publisher
+                ]
+            );
+
+            $this->helpers->logRecorder($book);
+        } catch (\Exception $exception) {
+            return response()->json($exception);
+        }
         return response()->json($book);
     }
 
@@ -98,14 +105,19 @@ class BookController extends Controller
             return response()->json($validator->errors());
         }
 
-        $book = Book::find($id);
-        $book->title = $request->title;
-        $book->isbn = $request->isbn;
-        $book->count_of_pages = $request->count_of_pages;
-        $book->user_id = $request->author;
-        $book->publisher_id = $request->publisher;
-        $book->save();
-        $this->helpers->logRecorder($book);
+        try
+        {
+            $book = Book::find($id);
+            $book->title = $request->title;
+            $book->isbn = $request->isbn;
+            $book->count_of_pages = $request->count_of_pages;
+            $book->user_id = $request->author;
+            $book->publisher_id = $request->publisher;
+            $book->save();
+            $this->helpers->logRecorder($book);
+        } catch (\Exception $exception) {
+            return response()->json($exception);
+        }
         return response()->json($book);
     }
 

@@ -3,15 +3,25 @@
 namespace Tests\Feature;
 
 use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class AuthorTest
+ *
+ * @package Tests\Feature
+ */
 class AuthorTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-
+    /**
+     * Author creation
+     *
+     * @return mixed
+     */
     public function createUser()
     {
         $user = User::create(
@@ -24,23 +34,37 @@ class AuthorTest extends TestCase
         );
         return $user;
     }
+
     /**
-     * A basic feature test example.
+     * Testing the possibility of  getting all authors
      *
-     * @return void
+     * @test
+     *
      */
-    /** @test */
     public function getAllAuthors()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
 
         $response = $this->post('/api/authors');
         $response->assertStatus(200);
 
     }
-    /** @test */
+
+    /**
+     * Testing author creation
+     *
+     * @test
+     *
+     */
     public function createNewAuthor()
     {
-
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
         $attributes = [
             'name' => $this->faker->name,
             'email' => $this->faker->email,
@@ -60,9 +84,18 @@ class AuthorTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
+    /**
+     * Testing author editing
+     *
+     * @test
+     *
+     */
     public function editAuthor()
     {
+            Passport::actingAs(
+                factory(User::class)->create(),
+                ['create-servers']
+            );
         $user = $this->createUser();
         $user_id = $user->id;
 
@@ -86,8 +119,20 @@ class AuthorTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
-    public function deleteAuthor(){
+    /**
+     * Testing author removal
+     *
+     * @test
+     *
+     */
+
+    public function deleteAuthor()
+    {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $user = $this->createUser();
         $user_id = $user->id;
         $structure = [

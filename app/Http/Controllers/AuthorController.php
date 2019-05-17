@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class AuthorController
@@ -33,7 +34,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = User::where('is_author', true)->get();
+        $authors = User::where('is_author', true)->paginate(10);
 
         return view('authors.index', compact('authors'));
     }
@@ -69,7 +70,7 @@ class AuthorController extends Controller
             [
                 'name'  => $request->name,
                 'email' =>  $request->email,
-                'password'  =>  $request->password,
+                'password'  =>  Hash::make($request->password),
                 'is_author' => true
             ]
         );
@@ -119,16 +120,21 @@ class AuthorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->is_author) {
+            return back()
+                ->with('access_denied', 'Sorry, but you haven\'t permissions to edit user');
+        }
+
         $this->validate(
             $request,
             [
                 'name' => 'required|min:3',
-                'password' =>   'required|confirmed|min:6'
             ]
         );
         $user = User::find($id);
         $user->name = $request->name;
-        $user->password = $request->password;
+        $user->password = $request->password ? Hash::make($request->password) : $user->password;
+
         $user->save();
         $this->helpers->logRecorder($user);
 
@@ -148,7 +154,6 @@ class AuthorController extends Controller
             $this->helpers->logRecorder($user);
             $user->delete();
         }
-        return redirect(route('all_authors'))
-            ->with('access_denied', 'Sorry, but you haven\'t permissions to delete user');
+        return redirect(route('all_authors'));
     }
 }

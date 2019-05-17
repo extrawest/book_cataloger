@@ -3,14 +3,26 @@
 namespace Tests\Feature;
 
 use App\Publisher;
+use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class PublisherTest
+ *
+ * @package Tests\Feature
+ */
 class PublisherTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
+    /**
+     * Creating publishing
+     *
+     * @return mixed
+     */
     public function createPublisher()
     {
         $publisher = Publisher::create(
@@ -22,17 +34,37 @@ class PublisherTest extends TestCase
         return $publisher;
     }
 
-    /** @test */
+    /**
+     * Testing the possibility of obtaining all publishers
+     *
+     * @test
+     *
+     */
     public function allPublishers()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $response = $this->json('POST', '/api/publishers', []);
         $response->assertStatus(200);
     }
 
-    /** @test */
+    /**
+     * Testing the possibility of adding distancing
+     *
+     * @test
+     *
+     */
 
     public function addPublisher()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $attributes = [
             'title' => $this->faker->title,
             'url'   => $this->faker->url
@@ -50,10 +82,20 @@ class PublisherTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
+    /**
+     * Editing Testing
+     *
+     * @test
+     *
+     */
 
     public function updatePublisher()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $publisher = $this->createPublisher();
         $attributes = [
             'title' => $this->faker->title,
@@ -72,9 +114,19 @@ class PublisherTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
+    /**
+     * Removal testing
+     *
+     * @test
+     *
+     */
     public function deletePublisher()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $publisher = $this->createPublisher();
         $structure = [
             'message'

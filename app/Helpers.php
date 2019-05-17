@@ -25,12 +25,12 @@ class Helpers
             $line .= $key . ": " . $datum . ", ";
         }
 
-        $line = date('Y-m-d H:m:i') . " " . $line . "\n";
+        $log = date('Y-m-d H:m:i') . " " . $line . " by " . auth()->user()->email . ";" . "\n";
 
         if (file_exists(storage_path('app/' . $path))) {
-            Storage::append($path, $line);
+            Storage::append($path, $log);
         } else {
-            Storage::put($path, $line);
+            Storage::put($path, $log);
         }
     }
 }

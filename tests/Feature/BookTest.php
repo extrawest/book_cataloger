@@ -5,13 +5,25 @@ namespace Tests\Feature;
 use App\Book;
 use App\Publisher;
 use App\User;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class BookTest
+ *
+ * @package Tests\Feature
+ */
 class BookTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
+
+    /**
+     * Book creation
+     *
+     * @return mixed
+     */
 
     public function createBook()
     {
@@ -41,17 +53,37 @@ class BookTest extends TestCase
         return $book;
     }
 
-    /** @test */
+    /**
+     * Testing the possibility of  getting all books
+     *
+     * @test
+     *
+     */
     public function allBook()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $response = $this->json('POST', '/api/books', []);
         $response->assertStatus(200);
     }
 
-    /** @test */
+    /**
+     * Testing the creation of a book
+     *
+     * @test
+     *
+     */
 
     public function addBook()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $book = $this->createBook();
         $attributes = [
             'title' => $this->faker->title,
@@ -76,10 +108,20 @@ class BookTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
+    /**
+     * Book editing testing
+     *
+     * @test
+     *
+     */
 
     public function updateBook()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $book = $this->createBook();
         $book_id = $book->id;
         $attributes = [
@@ -105,10 +147,20 @@ class BookTest extends TestCase
         $response->assertJsonStructure($structure);
     }
 
-    /** @test */
+    /**
+     * Book removal testing
+     *
+     * @test
+     *
+     */
 
     public function deleteBook()
     {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
         $book = $this->createBook();
         $structure = [
             'message'
