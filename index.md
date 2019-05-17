@@ -1,5 +1,5 @@
 # **Installation**
-1. Clone project from bitbucket repository git clone git clone https://bitbucket.org/katvet/book_cataloger.git
+1. Clone project from bitbucket repository `git clone https://bitbucket.org/katvet/book_cataloger.git`
 2. Run `cd book_cataloger`
 2. On your terminal run `composer install`, if composer not installed on your machine, go to https://getcomposer.org/ and install
 3. Run `cp .env.example .env`
