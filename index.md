@@ -48,4 +48,5 @@ All data must be sent in JSON format
 
 `/api/books/{book}/delete` delete book, where {book} = book id
 
+All action with database recording to `storage/app/logs/current_year/current_month/year-month-day.txt`
 
