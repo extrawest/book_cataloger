@@ -89,8 +89,7 @@ class AuthorController extends Controller
         $validator = Validator::make(
             $request->json()->all(),
             [
-                'name' => 'required|min:3',
-                'password' =>   'required|confirmed|min:6'
+                'name' => 'required|min:3'
             ]
         );
 
@@ -100,7 +99,7 @@ class AuthorController extends Controller
 
         $author = User::find($id);
         $author->name = $request->name;
-        $author->password = Hash::make($request->password);
+        $author->password = $request->password ? Hash::make($request->password) : $author->password;
         $author->save();
         $this->helpers->logRecorder($author);
         return response()->json($author);
