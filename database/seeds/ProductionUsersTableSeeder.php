@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
  * Class UsersTableSeeder
  *
  */
-class UsersTableSeeder extends Seeder
+class ProductionUsersTableSeeder extends Seeder
 {
     /**
      * Run seeding default data
@@ -17,13 +17,11 @@ class UsersTableSeeder extends Seeder
     {
         User::create(
             [
-            'name' => 'Vitaliy',
+            'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('pass4now!'),
             'is_author' =>  false
             ]
         );
-
-        factory(App\User::class, 50)->create();
     }
 }
