@@ -65,7 +65,7 @@ All URL use POST request
 
 All data must be sent in JSON format
 
-`/api/get_token` return token for OAuth 2.0
+`/api/get_token` return token for OAuth 2.0 Required fields are `email, password`
 
 `/api/authors` return all authors
 
